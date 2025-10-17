@@ -9,12 +9,12 @@ use Maatwebsite\Excel\Concerns\WithHeadings;
 class TodoListExport implements FromArray, WithHeadings, ShouldAutoSize
 {
     protected $rows;
-    protected $columns;
+    protected $headings;
 
     public function __construct(array $rows, array $headings)
     {
         $this->rows = $rows;
-        $this->columns = $headings;
+        $this->headings = $headings;
     }
 
     public function array(): array
@@ -24,6 +24,6 @@ class TodoListExport implements FromArray, WithHeadings, ShouldAutoSize
 
     public function headings(): array
     {
-        return $this->headings();
+        return $this->headings;
     }
 }
