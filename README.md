@@ -28,7 +28,7 @@ $ docker-compose up -d
 # Run migrate database
 $ php artisan migrate
 
-# Run the application NestJS
+# Run the application Laravel
 # Development
 $ php artisan serve
 
