@@ -1,0 +1,56 @@
+{
+	"info": {
+		"_postman_id": "94f4056a-7973-4629-a07f-b96b2075fc2c",
+		"name": "Todo List App",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "13160868"
+	},
+	"item": [
+		{
+			"name": "Create",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"title\": \"Title Todo 2\",\r\n    \"assignee\": \"John Doe\",\r\n    \"due_date\": \"2025-10-18\",\r\n    \"time_tracked\": \"\",\r\n    \"status\": \"\",\r\n    \"priority\": \"low\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8000/api/todolist/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"todolist",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Export",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		},
+		{
+			"name": "Chart Data",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		}
+	]
+}
