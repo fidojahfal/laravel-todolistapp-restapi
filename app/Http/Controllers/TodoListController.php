@@ -8,6 +8,7 @@ use App\Models\Todo_list;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Date;
+use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
 
 class TodoListController extends Controller
@@ -29,6 +30,59 @@ class TodoListController extends Controller
 
         $todo = Todo_list::create($request->all());
         return response()->json(['message' => 'Success', 'data' => $todo], 200);
+    }
+
+    function getChartData(Request $request)
+    {
+        $queryParam = $request->filled('type') ? $request->input('type') : '';
+
+
+        if ($queryParam === 'status') {
+            $query = Todo_list::groupBy('status')->select('status', DB::raw('count(*) as total'))->pluck('total', 'status')->toArray();
+            $enumStatus = ["pending", "open", "in_progress", "completed"];
+            $statusSummary = [];
+
+            foreach ($enumStatus as $enum) {
+                $statusSummary[$enum] = $query[$enum] ?? 0;
+            }
+
+            return response()->json(['status_summary' => $statusSummary], 200);
+        }
+
+        if ($queryParam === 'priority') {
+            $query = Todo_list::groupBy('priority')->select('priority', DB::raw('count(*) as total'))->pluck('total', 'priority')->toArray();
+
+            $enumPriority = ["low", "medium", "high"];
+            $prioritySummary = [];
+
+            foreach ($enumPriority as $enum) {
+                $prioritySummary[$enum] = $query[$enum] ?? 0;
+            }
+
+            return response()->json(['priority_summary' => $prioritySummary], 200);
+        }
+
+        if ($queryParam === 'assignee') {
+            $query = Todo_list::groupBy('assignee')
+                ->select(
+                    'assignee',
+                    DB::raw('count(*) as total_todos'),
+                    DB::raw('SUM(CASE WHEN status = "pending" THEN 1 ELSE 0 END) as total_pending_todos'),
+                    DB::raw('SUM(CASE WHEN status = "completed" THEN time_tracked ELSE 0 END) as total_timetracked_completed_todos')
+                )
+                ->get()->toArray();
+            $assigneeSummary = [];
+
+            foreach ($query as $key => $value) {
+                $assigneeSummary[$value['assignee']] = [
+                    'total_todos' => $value['total_todos'],
+                    'total_pending_todos' => $value['total_pending_todos'],
+                    'total_timetracked_completed_todos' => $value['total_timetracked_completed_todos']
+                ];
+            }
+
+            return response()->json(['assignee_summary' => $assigneeSummary], 200);
+        }
     }
 
     function export(Request $request)
