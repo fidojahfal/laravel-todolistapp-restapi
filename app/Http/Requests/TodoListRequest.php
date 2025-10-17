@@ -13,7 +13,7 @@ class TodoListRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -27,8 +27,8 @@ class TodoListRequest extends FormRequest
             "title" => "string|required",
             "assignee" => "string|nullable",
             "due_date" => "date|required",
-            "time_tracked" => "numeric",
-            "status" => "string|required",
+            "time_tracked" => "numeric|nullable",
+            "status" => "string|nullable",
             "priority" => "string|required",
         ];
     }
